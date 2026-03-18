@@ -17,16 +17,6 @@ function saveToLocalStorage(inputs: CalculatorInputs) {
   } catch {}
 }
 
-function loadFromLocalStorage(): CalculatorInputs | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return { ...defaultInputs, ...JSON.parse(raw) };
-  } catch {
-    return null;
-  }
-}
-
 function exportToJson(inputs: CalculatorInputs) {
   const blob = new Blob([JSON.stringify(inputs, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -67,15 +57,6 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
     saveToLocalStorage(updated);
   };
 
-  const handleLoad = () => {
-    const saved = loadFromLocalStorage();
-    if (saved) {
-      onChange(saved);
-    } else {
-      alert("No saved configuration found");
-    }
-  };
-
   const handleReset = () => {
     onChange(defaultInputs);
     saveToLocalStorage(defaultInputs);
@@ -90,7 +71,6 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
 
       {/* Save / Load / Export / Import */}
       <div className="flex flex-wrap gap-2">
-        <button className={btnClass} onClick={handleLoad}>Load Saved</button>
         <button className={btnClass} onClick={handleReset}>Reset</button>
         <button className={btnClass} onClick={() => exportToJson(inputs)}>Export JSON</button>
         <button className={btnClass} onClick={() => importFromJson((v) => { onChange(v); })}>Import JSON</button>
@@ -122,7 +102,8 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
         <InputField label="Down Payment" value={inputs.downPaymentPct} onChange={set("downPaymentPct")} suffix="%" step={1} min={0} max={100} />
         <InputField label="Mortgage Interest Rate" value={inputs.mortgageRate} onChange={set("mortgageRate")} suffix="%" step={0.125} min={0} />
         <InputField label="Loan Term" value={inputs.loanTermYears} onChange={set("loanTermYears")} suffix="years" step={1} min={1} max={40} />
-        <InputField label="Closing Costs" value={inputs.closingCostsPct} onChange={set("closingCostsPct")} suffix="%" step={0.5} min={0} />
+        <InputField label="Buyer Closing Costs" value={inputs.buyerClosingCostsPct} onChange={set("buyerClosingCostsPct")} suffix="%" step={0.5} min={0} />
+        <InputField label="Seller Closing Costs" value={inputs.sellerClosingCostsPct} onChange={set("sellerClosingCostsPct")} suffix="%" step={0.5} min={0} />
       </section>
 
       {/* Ongoing Ownership Costs */}

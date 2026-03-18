@@ -20,11 +20,11 @@ import { DetailRow, DetailDivider, DetailHeader } from "./DetailRow";
 
 interface Props {
   data: CalculationResult;
-  closingCostsPct: number;
+  sellerClosingCostsPct: number;
   capitalGainsTaxRate: number;
 }
 
-export default function PortfolioComparisonChart({ data, closingCostsPct, capitalGainsTaxRate }: Props) {
+export default function PortfolioComparisonChart({ data, sellerClosingCostsPct, capitalGainsTaxRate }: Props) {
   const capGainsRate = capitalGainsTaxRate / 100;
   const [logScale, setLogScale] = useState(false);
   const { selected, handleContainerClick, onTooltipUpdate, clearSelection } = useChartClick(data, true);
@@ -39,7 +39,7 @@ export default function PortfolioComparisonChart({ data, closingCostsPct, capita
   const buyerStockGains = selected ? Math.max(0, selected.buyerStocks - selected.buyerStockCostBasis) : 0;
   const buyerCapGainsTax = buyerStockGains * capGainsRate;
   const buyerStocksAfterTax = selected ? selected.buyerStocks - buyerCapGainsTax : 0;
-  const saleClosingCosts = selected ? selected.homeValue * (closingCostsPct / 100) : 0;
+  const saleClosingCosts = selected ? selected.homeValue * (sellerClosingCostsPct / 100) : 0;
   const buyerHomeProceeds = selected ? selected.homeEquity - saleClosingCosts : 0;
   const buyerAfterTax = buyerStocksAfterTax + buyerHomeProceeds;
 
@@ -93,7 +93,7 @@ export default function PortfolioComparisonChart({ data, closingCostsPct, capita
 
           <div className="text-xs font-semibold text-green-700 mt-1">Buyer</div>
           <DetailRow label="Home equity" value={selected.homeEquity} />
-          <DetailRow label={`Sale closing costs (${closingCostsPct}%)`} value={-saleClosingCosts} color="text-red-600" />
+          <DetailRow label={`Sale closing costs (${sellerClosingCostsPct}%)`} value={-saleClosingCosts} color="text-red-600" />
           <DetailRow label="Home proceeds (gains rolled over)" value={buyerHomeProceeds} />
           <DetailRow label="Stocks" value={selected.buyerStocks} />
           <DetailRow label="Cost basis" value={selected.buyerStockCostBasis} />

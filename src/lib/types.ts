@@ -4,7 +4,8 @@ export interface CalculatorInputs {
   downPaymentPct: number;
   mortgageRate: number;
   loanTermYears: number;
-  closingCostsPct: number;
+  buyerClosingCostsPct: number;
+  sellerClosingCostsPct: number;
 
   // Ongoing Ownership
   propertyTaxRate: number;

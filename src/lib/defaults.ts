@@ -5,7 +5,8 @@ export const defaultInputs: CalculatorInputs = {
   downPaymentPct: 20,
   mortgageRate: 6.5,
   loanTermYears: 30,
-  closingCostsPct: 2,
+  buyerClosingCostsPct: 2,
+  sellerClosingCostsPct: 5,
 
   propertyTaxRate: 1.2,
   monthlyOwnershipCosts: 500,

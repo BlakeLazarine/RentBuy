@@ -6,7 +6,7 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     downPaymentPct,
     mortgageRate,
     loanTermYears,
-    closingCostsPct,
+    buyerClosingCostsPct,
     simulationYears,
     propertyTaxRate,
     monthlyOwnershipCosts,
@@ -24,7 +24,7 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
   } = inputs;
 
   const downPayment = homePrice * (downPaymentPct / 100);
-  const closingCosts = homePrice * (closingCostsPct / 100);
+  const closingCosts = homePrice * (buyerClosingCostsPct / 100);
   const loanAmount = homePrice - downPayment;
   const totalMonths = loanTermYears * 12;
   const monthlyRate = mortgageRate / 100 / 12;

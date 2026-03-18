@@ -17,7 +17,7 @@ export default function ChartsPanel({ data, inputs }: Props) {
       <AnnualRentCostChart data={data} />
       <AnnualOwningCostChart data={data} />
       <CostDifferenceChart data={data} />
-      <PortfolioComparisonChart data={data} closingCostsPct={inputs.closingCostsPct} capitalGainsTaxRate={inputs.capitalGainsTaxRate} />
+      <PortfolioComparisonChart data={data} sellerClosingCostsPct={inputs.sellerClosingCostsPct} capitalGainsTaxRate={inputs.capitalGainsTaxRate} />
     </div>
   );
 }
