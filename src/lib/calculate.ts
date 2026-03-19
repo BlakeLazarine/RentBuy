@@ -10,6 +10,7 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     simulationYears,
     propertyTaxRate,
     monthlyOwnershipCosts,
+    monthlyMortgageInsurance,
     prop13Enabled,
     monthlyRent,
     annualRentIncreasePct,
@@ -20,7 +21,7 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     stateTaxRate,
     federalLoanDeductionCap,
     stateLoanDeductionCap,
-    deductPropertyTaxFederal,
+    underSaltLimit,
   } = inputs;
 
   const downPayment = homePrice * (downPaymentPct / 100);
@@ -72,11 +73,13 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     remainingBalance: balance,
     propertyTax: 0,
     ownershipCosts: 0,
+    mortgageInsurance: 0,
     homeValue: homePrice,
     homeEquity: initialEquity,
     federalMortgageSavings: 0,
     stateMortgageSavings: 0,
     propertyTaxSavings: 0,
+    saltStateClawback: 0,
     renterStocks,
     buyerStocks: 0,
     renterStockGrowth: 0,
@@ -119,9 +122,13 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     // --- Monthly ownership costs (grow with inflation) ---
     const ownershipCosts = monthlyOwnershipCosts * 12 * Math.pow(1 + inflationRate / 100, year - 1);
 
+    // --- Mortgage insurance (PMI) — applies while LTV > 80% ---
+    const ltv = homeValue > 0 ? balance / homeValue : 0;
+    const mortgageInsurance = ltv > 0.8 ? monthlyMortgageInsurance * 12 : 0;
+
     // --- Annual ownership cost before tax ---
     const annualMortgage = yearInterest + yearPrincipal;
-    const annualOwnershipCostBeforeTax = annualMortgage + propertyTax + ownershipCosts;
+    const annualOwnershipCostBeforeTax = annualMortgage + propertyTax + ownershipCosts + mortgageInsurance;
 
     // --- Tax savings ---
     // Federal mortgage interest deduction
@@ -132,12 +139,17 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
     const stateDeductibleInterest = yearInterest * stateDeductibleFraction;
     const stateMortgageSavings = stateDeductibleInterest * (stateTaxRate / 100);
 
-    // Property tax deduction (federal only, if enabled)
-    const propertyTaxSavings = deductPropertyTaxFederal
+    // Property tax deduction (federal, if under SALT limit)
+    const propertyTaxSavings = underSaltLimit
       ? propertyTax * (federalTaxRate / 100)
       : 0;
 
-    const taxSavings = -(federalMortgageSavings + stateMortgageSavings + propertyTaxSavings);
+    // SALT clawback: state tax savings reduce the SALT deduction, increasing federal tax
+    const saltStateClawback = underSaltLimit
+      ? stateMortgageSavings * (federalTaxRate / 100)
+      : 0;
+
+    const taxSavings = -(federalMortgageSavings + stateMortgageSavings + propertyTaxSavings - saltStateClawback);
 
     // --- Net annual owning cost ---
     const netAnnualOwningCost = annualOwnershipCostBeforeTax + taxSavings;
@@ -188,11 +200,13 @@ export function calculate(inputs: CalculatorInputs): CalculationResult {
       remainingBalance: balance,
       propertyTax,
       ownershipCosts,
+      mortgageInsurance,
       homeValue,
       homeEquity,
       federalMortgageSavings,
       stateMortgageSavings,
       propertyTaxSavings,
+      saltStateClawback,
       renterStocks,
       buyerStocks,
       renterStockGrowth,

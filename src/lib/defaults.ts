@@ -10,6 +10,7 @@ export const defaultInputs: CalculatorInputs = {
 
   propertyTaxRate: 1.2,
   monthlyOwnershipCosts: 500,
+  monthlyMortgageInsurance: 200,
   prop13Enabled: true,
 
   monthlyRent: 3500,
@@ -25,6 +26,6 @@ export const defaultInputs: CalculatorInputs = {
   stateTaxRate: 9.3,
   federalLoanDeductionCap: 750000,
   stateLoanDeductionCap: 1000000,
-  deductPropertyTaxFederal: true,
+  underSaltLimit: true,
   capitalGainsTaxRate: 15,
 };

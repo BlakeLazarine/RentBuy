@@ -10,6 +10,7 @@ export interface CalculatorInputs {
   // Ongoing Ownership
   propertyTaxRate: number;
   monthlyOwnershipCosts: number; // HOA + maintenance + insurance (absolute $, grows with inflation)
+  monthlyMortgageInsurance: number; // PMI, required when down payment < 20%, drops off at 80% LTV
   prop13Enabled: boolean;
 
   // Rent
@@ -29,7 +30,7 @@ export interface CalculatorInputs {
   stateTaxRate: number;
   federalLoanDeductionCap: number; // max loan amount for federal mortgage interest deduction
   stateLoanDeductionCap: number;   // max loan amount for state mortgage interest deduction (e.g. $1M for CA)
-  deductPropertyTaxFederal: boolean; // whether to deduct property tax from federal income
+  underSaltLimit: boolean; // under SALT deduction limit — enables property tax deduction and claws back federal benefit of state tax savings
   capitalGainsTaxRate: number; // long-term capital gains rate for stock liquidation
 }
 
@@ -58,6 +59,7 @@ export interface YearlyData {
   remainingBalance: number;
   propertyTax: number;
   ownershipCosts: number;
+  mortgageInsurance: number;
   homeValue: number;
   homeEquity: number;
 
@@ -65,6 +67,7 @@ export interface YearlyData {
   federalMortgageSavings: number;
   stateMortgageSavings: number;
   propertyTaxSavings: number;
+  saltStateClawback: number; // federal tax increase from reduced SALT deduction due to state tax savings
 
   // Intermediate - portfolio breakdown
   renterStocks: number;

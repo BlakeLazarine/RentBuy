@@ -100,6 +100,9 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
         </h3>
         <InputField label="Home Price" value={inputs.homePrice} onChange={set("homePrice")} prefix="$" step={10000} min={0} />
         <InputField label="Down Payment" value={inputs.downPaymentPct} onChange={set("downPaymentPct")} suffix="%" step={1} min={0} max={100} />
+        {inputs.downPaymentPct < 20 && (
+          <InputField label="Monthly Mortgage Insurance (PMI)" value={inputs.monthlyMortgageInsurance} onChange={set("monthlyMortgageInsurance")} prefix="$" step={25} min={0} />
+        )}
         <InputField label="Mortgage Interest Rate" value={inputs.mortgageRate} onChange={set("mortgageRate")} suffix="%" step={0.125} min={0} />
         <InputField label="Loan Term" value={inputs.loanTermYears} onChange={set("loanTermYears")} suffix="years" step={1} min={1} max={40} />
         <InputField label="Buyer Closing Costs" value={inputs.buyerClosingCostsPct} onChange={set("buyerClosingCostsPct")} suffix="%" step={0.5} min={0} />
@@ -135,7 +138,7 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
         <InputField label="State Tax Rate" value={inputs.stateTaxRate} onChange={set("stateTaxRate")} suffix="%" step={0.1} min={0} max={100} />
         <InputField label="Federal Mortgage Deduction Loan Cap" value={inputs.federalLoanDeductionCap} onChange={set("federalLoanDeductionCap")} prefix="$" step={50000} min={0} />
         <InputField label="State Mortgage Deduction Loan Cap" value={inputs.stateLoanDeductionCap} onChange={set("stateLoanDeductionCap")} prefix="$" step={50000} min={0} />
-        <InputField label="Deduct property tax from federal income" value={inputs.deductPropertyTaxFederal} onChange={set("deductPropertyTaxFederal")} isCheckbox />
+        <InputField label="Under SALT deduction limit" value={inputs.underSaltLimit} onChange={set("underSaltLimit")} isCheckbox />
         <InputField label="Capital Gains Tax Rate" value={inputs.capitalGainsTaxRate} onChange={set("capitalGainsTaxRate")} suffix="%" step={1} min={0} max={100} />
       </section>
     </div>

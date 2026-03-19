@@ -40,12 +40,20 @@ export default function AnnualOwningCostChart({ data }: Props) {
           <DetailRow label="  Interest" value={selected.interestPaid} indent />
           <DetailRow label="Property tax" value={selected.propertyTax} />
           <DetailRow label="Other monthly costs (HOA/maint./ins.)" value={selected.ownershipCosts} />
+          {selected.mortgageInsurance > 0 && (
+            <DetailRow label="Mortgage insurance (PMI)" value={selected.mortgageInsurance} />
+          )}
           <DetailDivider />
           <DetailRow label="Total before tax savings" value={selected.annualOwnershipCostBeforeTax} bold />
           <DetailDivider />
           <DetailRow label="Federal mortgage interest deduction" value={-selected.federalMortgageSavings} color="text-green-600" />
           <DetailRow label="State mortgage interest deduction" value={-selected.stateMortgageSavings} color="text-green-600" />
-          <DetailRow label="Property tax deduction" value={-selected.propertyTaxSavings} color="text-green-600" />
+          {selected.propertyTaxSavings > 0 && (
+            <DetailRow label="Property tax deduction (federal)" value={-selected.propertyTaxSavings} color="text-green-600" />
+          )}
+          {selected.saltStateClawback > 0 && (
+            <DetailRow label="SALT clawback (reduced federal deduction)" value={selected.saltStateClawback} color="text-red-600" />
+          )}
           <DetailRow label="Total tax savings" value={selected.taxSavings} bold color="text-green-600" />
           <DetailDivider />
           <DetailRow label="Net annual cost of owning" value={selected.netAnnualOwningCost} bold />

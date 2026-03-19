@@ -36,6 +36,9 @@ export default function CostDifferenceChart({ data }: Props) {
           <DetailRow label="  Mortgage (P&I)" value={selected.mortgagePayment} indent />
           <DetailRow label="  Property tax" value={selected.propertyTax} indent />
           <DetailRow label="  Other monthly costs" value={selected.ownershipCosts} indent />
+          {selected.mortgageInsurance > 0 && (
+            <DetailRow label="  Mortgage insurance (PMI)" value={selected.mortgageInsurance} indent />
+          )}
           <DetailRow label="Tax savings" value={selected.taxSavings} color="text-green-600" />
           <DetailRow label="Net owning cost" value={selected.netAnnualOwningCost} bold />
           <DetailDivider />
